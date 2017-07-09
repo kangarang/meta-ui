@@ -5,6 +5,7 @@ import Tx from 'ethereumjs-tx'
 import Account from '../components/Account'
 import privateKeys from '../private-keys.json'
 import json from '../contracts/HumanStandardToken.json'
+import ballotJSON from '../contracts/Ballot.json'
 
 const Web3 = require('web3')
 const web3 = new Web3()
@@ -12,11 +13,13 @@ const provider = new web3.providers.HttpProvider('http://localhost:8545')
 
 // creates an abstraction layer to interface with the contract
 const KangCoin = contract(json)
+const Ballot = contract(ballotJSON)
 
 // imports keys from private-keys.json
 const pKeys = Object.values(privateKeys.keys)
 
 KangCoin.setProvider(provider)
+Ballot.setProvider(provider)
 web3.setProvider(provider)
 
 console.log(web3)
@@ -96,6 +99,10 @@ class Accounts extends Component {
         })
     }
 
+    approveTransaction = () => {
+        
+    }
+
     handleSendKangCoin = (fromAccount, ind) => {
         let kangCoin
         return KangCoin.deployed()
@@ -157,6 +164,20 @@ class Accounts extends Component {
         this.refresh()
     }
 
+    handleVote = (addressFrom) => {
+        let addressTo = web3.eth.accounts.indexOf(this.state.to)
+        let ballot
+        return Ballot.deployed()
+            .then(deployed => {
+                console.log(deployed);
+                ballot = deployed
+                return ballot.vote.sendTransaction(addressTo, {from: addressFrom})
+            })
+            .then(res => {
+                console.log("res:", res);
+            })
+    }
+
     render() {
         return (
             <div style={styles.container}>
@@ -172,6 +193,7 @@ class Accounts extends Component {
                         setAmount={this.handleSetAmount}
                         copy={this.handleCopy}
                         sendKang={this.handleSendKangCoin}
+                        vote={this.handleVote}
                     />
                 )}
             </div>

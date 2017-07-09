@@ -41,7 +41,7 @@ const styles = {
     }
 }
 
-const Account = ({ ind, setTo, account, kangBalance, balance, send, setAmount, copy, sendKang }) => {
+const Account = ({ ind, setTo, account, kangBalance, balance, send, setAmount, copy, sendKang, vote }) => {
     return (
         <div style={styles.container}>
             <div style={{ border: `3px solid #${account.slice(-6)}`, padding: '1em' }}>
@@ -66,6 +66,7 @@ const Account = ({ ind, setTo, account, kangBalance, balance, send, setAmount, c
                 <input placeholder={'amount'} onChange={setAmount} />
                 <div onClick={e => send(e, ind, account)} style={styles.send}>Send ETH</div>
                 <div onClick={e => sendKang(account, ind)} style={styles.send}>Send KNG</div>
+                <div onClick={e => vote(account)} style={styles.send}>Vote</div>
             </form>
         </div>
     )
