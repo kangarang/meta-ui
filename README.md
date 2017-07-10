@@ -70,10 +70,12 @@ Scripts
 ```json
 {
     "start": "react-scripts start",
+    "build": "react-scripts build",
     "test": "cd truffle && truffle deploy && truffle test && cd .. && mocha test/test.js",
+    "eject": "react-scripts eject",
     "external": "cd truffle && truffle exec scripts/external.js",
-    "migrate": "cd truffle && truffle migrate && cp build/contracts/* ../src/contracts",
-    "testrpc": "cd src && testrpci"
+    "migrate": "cd truffle && rm -rf build && truffle migrate && cp build/contracts/* ../src/contracts",
+    "testrpc": "cd src && rm -rf contracts && mkdir contracts && testrpci"
 }
 ```
 
@@ -82,11 +84,11 @@ Scripts
 Tools & Credits
 ---------------
 
-- [create-react-app](https://github.com/facebookincubator/create-react-app)
-- [testrpc](https://github.com/ethereumjs/testrpc)
-- [truffle](https://github.com/trufflesuite/truffle)
-- [web3.js](https://github.com/ethereum/web3.js/)
-- [mocha.js](https://github.com/mochajs/mocha)
+- [create-react-app](https://github.com/facebookincubator/create-react-app) -- react.js boilerplate
+- [testrpc](https://github.com/ethereumjs/testrpc) -- local ethereum blockchain server
+- [truffle](https://github.com/trufflesuite/truffle) -- smart contract compilation, linking, and deployment
+- [web3.js](https://github.com/ethereum/web3.js/) -- communicate with smart contracts
+- [mocha.js](https://github.com/mochajs/mocha) -- testing contracts
 
 https://learnxinyminutes.com/docs/solidity/
 
