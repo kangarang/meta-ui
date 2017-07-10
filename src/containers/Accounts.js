@@ -73,7 +73,6 @@ class Accounts extends Component {
     }
 
     getKangBalances = () => {
-
         return KangCoin.deployed()
             .then(instance => {
                 return Promise.all(
@@ -81,7 +80,6 @@ class Accounts extends Component {
                 )
             })
             .then(balances => {
-                console.log(balances)
                 return balances.map(one => one.toNumber())
             })
             .then(numbers => {
@@ -99,9 +97,7 @@ class Accounts extends Component {
         })
     }
 
-    approveTransaction = () => {
-        
-    }
+    approveTransaction = () => {}
 
     handleSendKangCoin = (fromAccount, ind) => {
         let kangCoin
@@ -113,7 +109,11 @@ class Accounts extends Component {
             })
             .then(balance => {
                 console.log(`Account ${ind} balance:`, balance.toNumber())
-                return kangCoin.transfer.sendTransaction(this.state.to, this.state.amount, {from: fromAccount})
+                return kangCoin.transfer.sendTransaction(
+                    this.state.to,
+                    this.state.amount,
+                    { from: fromAccount }
+                )
             })
             .then(result => {
                 console.log(result)
@@ -164,38 +164,56 @@ class Accounts extends Component {
         this.refresh()
     }
 
-    handleVote = (addressFrom) => {
+    handleVote = addressFrom => {
         let addressTo = web3.eth.accounts.indexOf(this.state.to)
         let ballot
         return Ballot.deployed()
             .then(deployed => {
-                console.log(deployed);
+                console.log(deployed)
                 ballot = deployed
-                return ballot.vote.sendTransaction(addressTo, {from: addressFrom})
+                return ballot.vote.sendTransaction(addressTo, {
+                    from: addressFrom
+                })
             })
             .then(res => {
-                console.log("res:", res);
+                console.log('res:', res)
+            })
+    }
+
+    getWinner = e => {
+        e.preventDefault()
+        return Ballot.deployed()
+            .then(blt => {
+                return blt.winner()
+            })
+            .then(winner => {
+                console.log(winner.toNumber())
             })
     }
 
     render() {
         return (
-            <div style={styles.container}>
-                {web3.eth.accounts.map((act, ind) =>
-                    <Account
-                        key={ind}
-                        ind={ind}
-                        setTo={this.handleSetTo}
-                        account={act}
-                        balance={this.getBalance}
-                        kangBalance={this.state.kangBalances[ind]}
-                        send={this.handleSendRawEth}
-                        setAmount={this.handleSetAmount}
-                        copy={this.handleCopy}
-                        sendKang={this.handleSendKangCoin}
-                        vote={this.handleVote}
-                    />
-                )}
+            <div>
+
+                <button onClick={this.getWinner}>Get Winner</button>
+
+                <div style={styles.container}>
+                    {web3.eth.accounts.map((act, ind) =>
+                        <Account
+                            key={ind}
+                            ind={ind}
+                            setTo={this.handleSetTo}
+                            account={act}
+                            balance={this.getBalance}
+                            kangBalance={this.state.kangBalances[ind]}
+                            send={this.handleSendRawEth}
+                            setAmount={this.handleSetAmount}
+                            copy={this.handleCopy}
+                            sendKang={this.handleSendKangCoin}
+                            vote={this.handleVote}
+                        />
+                    )}
+                </div>
             </div>
         )
     }

@@ -21,7 +21,7 @@
         "test": "cd truffle && truffle deploy && truffle test && cd .. && mocha test/test.js",
         "eject": "react-scripts eject",
         "external": "cd truffle && truffle exec scripts/external.js",
-        "migrate": "cd truffle && truffle migrate && cp build/contracts/* ../src/contracts",
-        "testrpc": "cd src && testrpci"
+        "migrate": "cd truffle && rm -rf build && truffle migrate && cp build/contracts/* ../src/contracts",
+        "testrpc": "cd src && rm -rf contracts && mkdir contracts && testrpci"
     }
 }
